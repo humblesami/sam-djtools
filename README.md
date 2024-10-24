@@ -1,11 +1,11 @@
 **Insallation**
 
 1. `pip install sam-djtools`
-2. Add `form_navigation` in installed apps in `settings.py` of django project
+2. Add `sam_tools` in installed apps in `settings.py` of django project
    
 
     INSTALLED_APPS = [
-       'form_navigation',
+       'sam_tools',
        # ...
     ]
 (at the top)
@@ -37,7 +37,3 @@ except installing the module with pip plus adding to the top of `INSTALLED_APPS`
    http://127.0.0.1:8000/admin/sample_app/model1/1/change/
 
 7. Add image to check preview
-
-**Make you own pip package**
-See https://github.com/humblesami/sam-djtools/blob/master/docs/make_pip.md to make/build/test and upload
-`your own pip package`

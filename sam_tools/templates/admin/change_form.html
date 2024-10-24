@@ -12,13 +12,16 @@
                 background-color: #5b80b2;
                 color: white;
             }
+            #content > h1, #content > h2 {
+                padding-left: 5px;
+            }
             fieldset div > input[type="text"]
             {
                 width: calc(100% - 10px);
             }
             .prev_next.navigate_recs {
                 display: flex;
-                justify-content: flex-end;
+                justify-content: flex-start;
                 font-weight: bold;
             }
         </style>
@@ -29,7 +32,7 @@
             <a class="prev" href="">Prev</a>
             <a class="next" href="">Next</a>
         </div>
-        <script defer="defer" src="{% static 'form_navigation/change_form_prev_next.js' %}"></script>
+        <script defer="defer" src="{% static 'sam_tools/change_form_prev_next.js' %}"></script>
     </div>
     {% endif %}
 {% endblock %}

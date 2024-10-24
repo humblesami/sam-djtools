@@ -1,6 +1,7 @@
 import sys
 from setuptools import find_namespace_packages, setup
 
+
 def main(vv):
 
     install_requires = [
@@ -20,7 +21,7 @@ def main(vv):
         ],
         "deploy": deploy_requires,
     }
-
+    
     with open("README.md", "r") as fh:
         long_description = fh.read()
 
@@ -28,7 +29,7 @@ def main(vv):
     setup(
         name='sam-djtools',
         version=str(vv),
-        description='Primary key based form navigation to explore next/prev records.',
+        description='1. sam_tools.py, 2.sam_tools.dj, 3. Primary key based form navigation to explore next/prev records.',
         classifiers=[
             "Programming Language :: Python :: 3",
             "License :: OSI Approved :: MIT License",
@@ -47,10 +48,10 @@ def main(vv):
         include_package_data=True,
         setup_requires=['setuptools_scm'],
         data_files=[
-            ('1', ['form_navigation/templates/admin/change_form.html']),
-            ('2', ['form_navigation/static/form_navigation/module.js'])
+            ('1', ['sam_tools/templates/admin/change_form.html']),
+            ('2', ['sam_tools/static/sam_tools/change_form_prev_next.js'])
         ],
-        packages=find_namespace_packages(include=["form_navigation"],),
+        packages=find_namespace_packages(include=["sam_tools"],),
     )
 
 
