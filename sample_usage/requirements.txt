@@ -1,0 +1,2 @@
+Django>=3
+sam-djtools>=1.0
