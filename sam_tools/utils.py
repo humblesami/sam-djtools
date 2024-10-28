@@ -1,5 +1,8 @@
 import base64
+import platform
+import sys
 import threading
+import traceback
 from urllib.parse import unquote
 
 from django.apps import apps
@@ -11,7 +14,6 @@ from django.core.paginator import Paginator
 from django.forms.models import model_to_dict
 from django.core.files.base import ContentFile
 from django.template.loader import render_to_string
-from .py import LogUtils, RtcUtils
 
 
 class EmailUtils:
@@ -27,14 +29,44 @@ class EmailUtils:
         def sender_method():
             try:
                 send_mail(
-                    subject, "", recipient_list=receiver_emails,  from_email=sender_email,
+                    subject, "", recipient_list=receiver_emails, from_email=sender_email,
                     fail_silently=False, html_message=html_message
                 )
+                print('Email sent to ')
+                print(receiver_emails)
             except:
-                LogUtils.log_error()
+                email_status = cls.get_error_message()
+                print('Email sending failed => '+email_status)
 
         thread = threading.Thread(target=sender_method)
         thread.start()
+
+    host_os = ''
+    @classmethod
+    def get_server_os(cls):
+        if cls.host_os:
+            return cls.host_os
+        cls.host_os = platform.system().lower()
+        return cls.host_os
+
+    @classmethod
+    def get_error_message(cls, framework_path=''):
+        eg = traceback.format_exception(*sys.exc_info())
+        error_message = ''
+        cnt = 0
+        for er in eg:
+            cnt += 1
+            if not framework_path:
+                framework_path = '/addons/'
+            packages_path = '/lib/python'
+            if platform.system().lower() == 'windows':
+                framework_path = framework_path.replace('/', '\\')
+                packages_path = packages_path.replace('/', '\\')
+            if er not in packages_path in er and er not in framework_path:
+                error_message += " " + er
+        if not error_message:
+            error_message = 'empty error'
+        return error_message
 
 
 class DbUtils:
@@ -111,61 +143,57 @@ class DbUtils:
 
     @classmethod
     def filtered_list(cls, list_objects, params):
-        try:
-            search_kw = params.get('search_kw')
-            show_fields = params.get('fields') or ''
-            search_fields = params.get('search_fields')
-            sort_by = params.get('sort_by')
-            page_no = 0
-            page_size = params.get('page_size')
-            if page_size:
-                page_size = int(page_size)
-                page_no = params.get('page_no') or 1
-                if page_no:
-                    page_no = int(page_no)
-            args = Q()
-            if search_fields:
-                args_dict = {}
-                arr = search_fields.split(',')
-                for item in arr:
-                    args_dict[item+'__icontains'] = search_kw
-                args.add(Q(**args_dict), Q.OR)
-            list_data1 = list_objects.filter(args).distinct()
-            pagination = {}
-            if sort_by:
-                sort_by = sort_by.split(',')
-                list_data1 = list_data1.order_by(*sort_by)
-            if page_size:
-                page_no = page_no or 1
-                if page_no < 1:
-                    page_no = 1
-                paginator = Paginator(list_data1, page_size)
-                page_count = paginator.num_pages
-                if page_no >= page_count:
-                    page_no = page_count
-                records_on_page = paginator.per_page
-                if page_no == page_count:
-                    records_on_page = paginator.count % paginator.per_page
+        search_kw = params.get('search_kw')
+        show_fields = params.get('fields') or ''
+        search_fields = params.get('search_fields')
+        sort_by = params.get('sort_by')
+        page_no = 0
+        page_size = params.get('page_size')
+        if page_size:
+            page_size = int(page_size)
+            page_no = params.get('page_no') or 1
+            if page_no:
+                page_no = int(page_no)
+        args = Q()
+        if search_fields:
+            args_dict = {}
+            arr = search_fields.split(',')
+            for item in arr:
+                args_dict[item+'__icontains'] = search_kw
+            args.add(Q(**args_dict), Q.OR)
+        list_data1 = list_objects.filter(args).distinct()
+        pagination = {}
+        if sort_by:
+            sort_by = sort_by.split(',')
+            list_data1 = list_data1.order_by(*sort_by)
+        if page_size:
+            page_no = page_no or 1
+            if page_no < 1:
+                page_no = 1
+            paginator = Paginator(list_data1, page_size)
+            page_count = paginator.num_pages
+            if page_no >= page_count:
+                page_no = page_count
+            records_on_page = paginator.per_page
+            if page_no == page_count:
+                records_on_page = paginator.count % paginator.per_page
 
-                list_data1 = paginator.page(page_no)
-                pagination = {
-                    'num_pages': paginator.num_pages,
-                    'count': paginator.count,
-                    'page_number': page_no,
-                    'per_page': paginator.per_page,
-                    'records_on_page': records_on_page
-                }
-                list_data1 = list_data1.object_list
-            if show_fields:
-                show_fields = show_fields.split(',')
-                list_data1 = list_data1.values(*show_fields)
-            else:
-                list_data1 = list_data1.values()
-            list_data1 = cls.serialize_list(list_data1)
-            return list_data1, pagination
-        except:
-            LogUtils.log_error()
-            raise
+            list_data1 = paginator.page(page_no)
+            pagination = {
+                'num_pages': paginator.num_pages,
+                'count': paginator.count,
+                'page_number': page_no,
+                'per_page': paginator.per_page,
+                'records_on_page': records_on_page
+            }
+            list_data1 = list_data1.object_list
+        if show_fields:
+            show_fields = show_fields.split(',')
+            list_data1 = list_data1.values(*show_fields)
+        else:
+            list_data1 = list_data1.values()
+        list_data1 = cls.serialize_list(list_data1)
+        return list_data1, pagination
 
     @classmethod
     def serialize_object(cls, item):
@@ -271,7 +299,4 @@ class DjangoUtils:
     def full_url(cls, request):
         return request.build_absolute_uri()
 
-    @classmethod
-    def emit_socket_event(cls, data):
-        RtcUtils.emit_event(data, settings.SOCKET_SERVER_URL)
 

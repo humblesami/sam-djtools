@@ -29,7 +29,7 @@ def main(vv):
     setup(
         name='sam-djtools',
         version=str(vv),
-        description='1. sam_tools.py, 2.sam_tools.dj, 3. Primary key based form navigation to explore next/prev records.',
+        description='1. sam_tools.utils, 2. Primary key based form navigation to explore next/prev records.',
         classifiers=[
             "Programming Language :: Python :: 3",
             "License :: OSI Approved :: MIT License",

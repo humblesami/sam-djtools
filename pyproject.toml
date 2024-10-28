@@ -21,7 +21,7 @@ dynamic = ["version"]
 "Issue tracker" = "https://github.com/humblesami/sam-djtools/issues"
 
 [tool.hatch.build.targets.sdist]
-include = [ "/docs",  "/src",  "/test",  "/requirements.txt",  "/CHANGES.rst",  "/README.md",  "/LICENSE.txt"]
+include = [ "/requirements.txt",  "/CHANGES.rst",  "/README.md",  "/LICENSE.txt"]
 markers = ["limit_memory"]
 log_level = "DEBUG"
 add_imports = "from __future__ import annotations"
