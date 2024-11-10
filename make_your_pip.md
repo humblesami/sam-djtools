@@ -72,16 +72,19 @@ https://pypi.org/manage/account/#api-tokens
 
 `twine upload --repository testpypi dist/*`
 
-`twine upload dist/* --config-file .pypirc_test`
-
+`twine upload dist/*`
 
 *After upload Install the uploaded package*
 
-pip install -i https://test.pypi.org/simple/ your_module_name
+**Install and test the uploaded package**
+
+    pip uninstall your_module_name
+
+    pip install -i https://test.pypi.org/simple/ your_module_name
 
 **Final Step, Upload to Production**
 
-`twine upload dist/* --config-file .pypirc_prod`
+`twine upload dist/*`
 
 *After upload Install the uploaded package*
 
@@ -91,4 +94,3 @@ use as
 
     from your_module_name import SomeClassOrMethod
     from your_module_name.sub_folder_name.filename import SomeClassOrMethod
-

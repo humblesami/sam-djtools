@@ -25,7 +25,6 @@ def next_prev_id(model, row_id):
 
     update_output(prev_obj, 'prev')
     update_output(next_obj, 'next')
-
     return output
 
 
@@ -46,6 +45,3 @@ class NavigateFormAdmin(admin.ModelAdmin):
         except Exception as e:
             self.message_user(request, e, level=messages.ERROR)
             return HttpResponseRedirect(request.path)
-
-
-admin.ModelAdmin = NavigateFormAdmin

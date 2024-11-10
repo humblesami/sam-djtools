@@ -95,7 +95,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 import os
 
-my_apps = ['sam_tools', 'initsql', 'sample_app']
+my_apps = ['sam_djtools', 'sample_app']
 INSTALLED_APPS = my_apps + INSTALLED_APPS
 # INSTALLED_APPS = INSTALLED_APPS + my_apps
 ALLOW_UNICODE_SLUGS = True
@@ -114,3 +114,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 MEDIA_URL = slashed_path + 'media/'
 STATIC_URL = slashed_path + 'static/'
 AUTH_PASSWORD_VALIDATORS = []
+ADMIN_UPDATE_LOGS = True

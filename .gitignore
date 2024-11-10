@@ -28,5 +28,3 @@ sitemaps
 temp.json
 /MySQLdb
 /rest_framework
-sample_usage/static/*
-!sample_usage/static/init.txt

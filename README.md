@@ -1,11 +1,11 @@
-**Insallation**
+**Installation**
 
 1. `pip install sam-djtools`
-2. Add `sam_tools` in installed apps in `settings.py` of django project
+2. Add `sam_djtools` in installed apps in `settings.py` of django project
    
 
     INSTALLED_APPS = [
-       'sam_tools',
+       'sam_djtools',
        # ...
     ]
 (at the top)
@@ -19,7 +19,7 @@ except installing the module with pip plus adding to the top of `INSTALLED_APPS`
 **Instructions to run the sample usage**
 
 1. `git clone https://github.com/humblesami/sam-djtools.git`
-2. `cd sam-djtools/sample_usage`
+2. `cd sample_usage`
 3. `pip install -r requirements.txt`
 4. `python manage.py initsql.py`
    5. This step will create db (sqlite)

@@ -1,9 +1,7 @@
 import base64
-import platform
-import sys
 import threading
-import traceback
 from urllib.parse import unquote
+from sam_pytools import LogUtils
 
 from django.apps import apps
 from django.db.models import Q
@@ -15,6 +13,7 @@ from django.forms.models import model_to_dict
 from django.core.files.base import ContentFile
 from django.template.loader import render_to_string
 
+default_app_config = 'sam_djtools.apps.SamToolsConfig'
 
 class EmailUtils:
 
@@ -35,38 +34,11 @@ class EmailUtils:
                 print('Email sent to ')
                 print(receiver_emails)
             except:
-                email_status = cls.get_error_message()
+                email_status = LogUtils.get_error_message()
                 print('Email sending failed => '+email_status)
 
         thread = threading.Thread(target=sender_method)
         thread.start()
-
-    host_os = ''
-    @classmethod
-    def get_server_os(cls):
-        if cls.host_os:
-            return cls.host_os
-        cls.host_os = platform.system().lower()
-        return cls.host_os
-
-    @classmethod
-    def get_error_message(cls, framework_path=''):
-        eg = traceback.format_exception(*sys.exc_info())
-        error_message = ''
-        cnt = 0
-        for er in eg:
-            cnt += 1
-            if not framework_path:
-                framework_path = '/addons/'
-            packages_path = '/lib/python'
-            if platform.system().lower() == 'windows':
-                framework_path = framework_path.replace('/', '\\')
-                packages_path = packages_path.replace('/', '\\')
-            if er not in packages_path in er and er not in framework_path:
-                error_message += " " + er
-        if not error_message:
-            error_message = 'empty error'
-        return error_message
 
 
 class DbUtils:
@@ -298,5 +270,3 @@ class DjangoUtils:
     @classmethod
     def full_url(cls, request):
         return request.build_absolute_uri()
-
-
