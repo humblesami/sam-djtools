@@ -12,15 +12,19 @@ from django.core.paginator import Paginator
 from django.forms.models import model_to_dict
 from django.core.files.base import ContentFile
 from django.template.loader import render_to_string
-
 default_app_config = 'sam_djtools.apps.SamToolsConfig'
+
 
 class EmailUtils:
 
     @classmethod
-    def send_mail_data(cls, mail_data):
-        html_message = render_to_string(mail_data['template_data'], mail_data['template_name'])
-        cls.send_email_thread(mail_data['emails'], mail_data['subject'], html_message)
+    def send_text_emails_asynchronous(cls, recipient_emails, subject, message):
+        cls.send_email_thread(recipient_emails, subject, message)
+
+    @classmethod
+    def send_template_emails_asynchronous(cls, recipient_emails, subject, template_name, data_dict):
+        html_message = render_to_string(data_dict, template_name)
+        cls.send_email_thread(recipient_emails, subject, html_message)
 
     @classmethod
     def send_email_thread(cls, receiver_emails, subject, html_message, sender_email="sami@gmail.com"):
@@ -183,7 +187,7 @@ class DbUtils:
         return res
 
 
-class DjangoUtils:
+class GeneralUtils:
 
     @classmethod
     def queryset_to_list(cls, queryset, fields=None, to_str=None, related=None):

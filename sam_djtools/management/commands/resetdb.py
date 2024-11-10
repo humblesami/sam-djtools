@@ -1,6 +1,7 @@
 import os
-import importlib
 import sam_pytools
+from ...del_migrations import del_process
+
 from django.conf import settings
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
@@ -14,21 +15,15 @@ except:
 
 class Command(BaseCommand):
     help = 'setting up db i.e. create db or drop db for dev purpose'
-    settings_dir = os.path.dirname(__file__)
     str = 'website/management/commands'
-    base_directory = ''
-    if str in settings_dir:
-        base_directory = settings_dir.replace(str, '')
-    else:
-        str = 'website\\management\\commands'
-        base_directory = settings_dir.replace(str, '')
 
-    def drop_create_db(self, root_path):
+    def drop_create_db(self):
         res = 'Unknown'
         database_info = settings.DATABASES['default']
+        del_process()
         db_engine = database_info['ENGINE']
         if db_engine.endswith('sqlite3') or db_engine.endswith('sqlite3_backend'):
-            db_path = root_path + '/db.sqlite3'
+            db_path = str(settings.BASE_DIR) + '/db.sqlite3'
             if os.path.exists(db_path):
                 os.remove(db_path)
             return 'created'
@@ -53,7 +48,6 @@ class Command(BaseCommand):
                 create_query = f"CREATE DATABASE {database_info['NAME']}"
                 cur.execute(create_query)
             if db_con:
-                importlib.import_module('del')
                 db_con.close()
                 return 'created'
             else:
@@ -67,19 +61,19 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         try:
-            root_path = str(settings.BASE_DIR)
-            res = self.drop_create_db(root_path)
+            res = self.drop_create_db()
             if res == 'created':
                 call_command('makemigrations')
                 call_command('migrate')
-                fixture_path = './fixtures.json'
-                if os.path.isfile(fixture_path):
+                fixture_path = settings.FIXTURES_PATH if hasattr(settings, 'FIXTURES_PATH') else ''
+                if fixture_path and os.path.isfile(fixture_path):
                     call_command('loaddata', fixture_path)
-                print('Dropped, Created, Migrated, loaded successfully')
+                else:
+                    print(f'{fixture_path} does not exist')
             elif res == 'already exists':
                 print('Already created')
             else:
-                print('Failed because ' + res)
+                print(f'Failed because {res}')
         except:
             error_message = sam_pytools.LogUtils.get_error_message()
-            print('Error ' + error_message)
+            print(f'Error {error_message}')

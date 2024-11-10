@@ -5,10 +5,10 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-version = "1.2.37"
+version = "1.2.42"
 name = "sam-djtools"
 dependencies = ["django>=3.2", 'django_currentuser>=0.6.0']
-description='1 sam_djtools.DbUtils, 2 sam_djtools.EmailUtils, 3. sam_djtools.DjangoUtils 4. Primary key based form navigation to explore next/prev records.'
+description='1 sam_djtools.DbUtils, 2 sam_djtools.EmailUtils, 3. sam_djtools.GeneralUtils 4. Primary key based form navigation to explore next/prev records.'
 readme = "README.md"
 keywords = ["djtools", "django-tools", "form-navigation", "email-in-thread"]
 authors = [{name = "Sami Akram", email="samiakram@live.com"}, ]

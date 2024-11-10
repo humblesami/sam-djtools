@@ -113,5 +113,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 MEDIA_URL = slashed_path + 'media/'
 STATIC_URL = slashed_path + 'static/'
-AUTH_PASSWORD_VALIDATORS = []
+TIME_ZONE = 'UTC'
+USE_TZ = True
 ADMIN_UPDATE_LOGS = True
+FIXTURES_PATH = str(BASE_DIR) + '/fixtures.json'

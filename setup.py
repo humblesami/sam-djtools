@@ -8,7 +8,10 @@ setup(
     setup_requires=['setuptools_scm'],
 
     include_package_data=True,
-    packages=find_namespace_packages(include=["sam_djtools", "sam_djtools.admin_models", "sam_djtools.utils"]),
+    packages=find_namespace_packages(include=[
+        "sam_djtools", "sam_djtools.admin_models",
+        "sam_djtools.utils", "sam_djtools.del_migrations",
+    ]),
     package_data={
         "sam_djtools": [
             "navigate_records.py",

@@ -25,7 +25,7 @@ activate the virtual environment
 
 `pip uninstall -y your_module_name`
 
-`pip install dist/your_module_name-0.1.0-py3-none-any.whl`
+`pip install dist/sam_djtools-1.2.42-py3-none-any.whl`
 
 **Upload your pip**
 
